@@ -29,17 +29,22 @@ function App() {
     e.preventDefault();
 
     if (editId) {
-      const editTodo = todos.find((todo) => todo.id === editId )
-      const updatedTodos = todos.map((t) => t.id === editTodo.id 
-        ? (t = {id: editTodo.id, name: todoName})
-        : { id: t.id, name: t.name}
-       )
-      setTodos(updatedTodos)
-      setEditId(0)
-      setTodoName("")
-      return
+      const editTodo = todos.find(todo => todo.id === editId);
+      const updatedTodos = todos.map(t =>
+        t.id === editTodo.id
+          ? (t = {
+              id: editTodo.id,
+              name: todoName,
+              completed: editTodo.completed,
+              created: editTodo.created,
+            })
+          : { id: t.id, name: t.name, completed: t.completed, created: t.created }
+      );
+      setTodos(updatedTodos);
+      setEditId(0);
+      setTodoName('');
+      return;
     }
-
 
     const name = todoNameRef.current.value;
     if (name === '') return;
@@ -47,7 +52,7 @@ function App() {
       return [...prev, { id: uuidv4(), name: name, completed: false, created: Date.now() }];
     });
     todoNameRef.current.value = null;
-    setTodoName('')
+    setTodoName('');
   }
 
   function deleteTodo(id) {
@@ -66,17 +71,19 @@ function App() {
       <div className="container">
         <h1>Todo List</h1>
         <form className="todoForm" onSubmit={addTodo}>
-          <input className="tbd" 
-          ref={todoNameRef} 
-          type="text"
-          value={todoName} 
-          onChange={(e) => setTodoName(e.target.value)} />
+          <input
+            className="tbd"
+            ref={todoNameRef}
+            type="text"
+            value={todoName}
+            onChange={e => setTodoName(e.target.value)}
+          />
           <button className="tbd" type="submit">
-            {editId ? "edit" : "+"}
+            {editId ? 'edit' : '+'}
           </button>
           <button className="tbd" onClick={markComplete}>
-          DeleteC
-        </button>
+            DeleteC
+          </button>
         </form>
         <div className="tbd">{todos.filter(todo => !todo.complete).length} left to do</div>
         <ul className="allTodos">
