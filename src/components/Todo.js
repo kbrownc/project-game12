@@ -1,6 +1,6 @@
 import React from 'react';
 
-function Todo({ todo, markComplete, editTodo, deleteTodo }) {
+function Todo({ todo, markComplete, editTodo, deleteTodo, viewAll }) {
   return (
     <div className="addbutton">
       <li className={todo.complete ? 'singleTodo-complete' : 'singleTodo'}>
@@ -10,7 +10,10 @@ function Todo({ todo, markComplete, editTodo, deleteTodo }) {
         <button onClick={() => markComplete(todo.id)}>Complete</button>
       </li>
       <div>
-        Created: {todo.created} Completd: {todo.dateCompleted}
+      { !viewAll ?
+        `Created: ${todo.created} Completd: ${todo.dateCompleted}`
+        : null
+      }
       </div>
     </div>
   );

@@ -12,6 +12,7 @@ function TodoList({ todos, markComplete, editTodo, deleteTodo, viewAll }) {
           markComplete={markComplete}
           editTodo={editTodo}
           deleteTodo={deleteTodo}
+          viewAll={viewAll}
         />
       );
     });
