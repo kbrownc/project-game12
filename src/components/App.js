@@ -6,6 +6,7 @@ function App() {
   const [todos, setTodos] = useState([]);
   const [todoName, setTodoName] = useState('');
   const [editId, setEditId] = useState(0);
+  const [viewAll, setViewAll] = useState(false);
   const todoNameRef = useRef();
   const LOCAL_STORAGE_KEY = 'game12-todos';
 
@@ -18,38 +19,49 @@ function App() {
     localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(todos));
   }, [todos]);
 
-  function markComplete() {
-    const newTodos = [...todos];
-    const todo = newTodos.find(todo => !todo.complete);
-    todo.complete = !todo.complete;
-    setTodos(newTodos);
+  function markComplete(id) {
+    const date = new Date();
+    const updatedTodos = todos.map(t =>
+      t.id === id
+        ? {
+            id: t.id,
+            name: t.name,
+            complete: !t.complete,
+            created: t.created,
+            dateCompleted: date.toDateString(),
+          }
+        : { id: t.id, name: t.name, complete: t.complete, created: t.created, dateCompleted: t.dateCompleted }
+    );
+    setTodos(updatedTodos);
+  }
+
+  function view() {
+    if (viewAll) {
+      setViewAll(false);
+    } else {
+      setViewAll(true);
+    }
   }
 
   function addTodo(e) {
     e.preventDefault();
-
     if (editId) {
       const editTodo = todos.find(todo => todo.id === editId);
       const updatedTodos = todos.map(t =>
         t.id === editTodo.id
-          ? (t = {
-              id: editTodo.id,
-              name: todoName,
-              completed: editTodo.completed,
-              created: editTodo.created,
-            })
-          : { id: t.id, name: t.name, completed: t.completed, created: t.created }
+          ? { id: editTodo.id, name: todoName, complete: editTodo.complete, created: editTodo.created }
+          : { id: t.id, name: t.name, complete: t.complete, created: t.created }
       );
       setTodos(updatedTodos);
       setEditId(0);
       setTodoName('');
       return;
     }
-
+    const date = new Date();
     const name = todoNameRef.current.value;
     if (name === '') return;
     setTodos(prev => {
-      return [...prev, { id: uuidv4(), name: name, completed: false, created: Date.now() }];
+      return [...prev, { id: uuidv4(), name: name, complete: false, created: date.toDateString() }];
     });
     todoNameRef.current.value = null;
     setTodoName('');
@@ -69,25 +81,21 @@ function App() {
   return (
     <div className="app">
       <div className="container">
-        <h1>Todo List</h1>
+        <h1>Todos</h1>
         <form className="todoForm" onSubmit={addTodo}>
-          <input
-            className="tbd"
-            ref={todoNameRef}
-            type="text"
-            value={todoName}
-            onChange={e => setTodoName(e.target.value)}
-          />
-          <button className="tbd" type="submit">
-            {editId ? 'edit' : '+'}
-          </button>
-          <button className="tbd" onClick={markComplete}>
-            DeleteC
-          </button>
+          <input ref={todoNameRef} type="text" value={todoName} onChange={e => setTodoName(e.target.value)} />
+          <button type="submit">{editId ? 'edit' : '+'}</button>
+          <button onClick={view}>{viewAll ? 'View all' : 'View active'}</button>
         </form>
-        <div className="tbd">{todos.filter(todo => !todo.complete).length} left to do</div>
+        <div>{todos.filter(todo => !todo.complete).length} left to do</div>
         <ul className="allTodos">
-          <TodoList todos={todos} markComplete={markComplete} editTodo={editTodo} deleteTodo={deleteTodo} />
+          <TodoList
+            todos={todos}
+            markComplete={markComplete}
+            editTodo={editTodo}
+            deleteTodo={deleteTodo}
+            viewAll={viewAll}
+          />
         </ul>
       </div>
     </div>

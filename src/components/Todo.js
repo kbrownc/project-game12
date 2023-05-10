@@ -1,20 +1,17 @@
 import React from 'react';
 
 function Todo({ todo, markComplete, editTodo, deleteTodo }) {
-
-  // function todoClick() {
-  //   markComplete(todo.id);
-  // }
-
   return (
     <div className="addbutton">
-      <li className="singleTodo">
-        {todo.complete ? "x " : null}
+      <li className={todo.complete ? 'singleTodo-complete' : 'singleTodo'}>
         <span className="itemText">{todo.name}</span>
         <button onClick={() => editTodo(todo.id)}>Edit</button>
         <button onClick={() => deleteTodo(todo.id)}>Delete</button>
-        <button onClick={markComplete}>Complete</button>
+        <button onClick={() => markComplete(todo.id)}>Complete</button>
       </li>
+      <div>
+        Created: {todo.created} Completd: {todo.dateCompleted}
+      </div>
     </div>
   );
 }
