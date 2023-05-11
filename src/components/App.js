@@ -85,7 +85,7 @@ function App() {
         <form className="todoForm" onSubmit={addTodo}>
           <input ref={todoNameRef} type="text" value={todoName} onChange={e => setTodoName(e.target.value)} />
           <button type="submit">{editId ? 'edit' : '+'}</button>
-          <button onClick={view}>{viewAll ? 'View all' : 'View active'}</button>
+          <button onClick={view}>{!viewAll ? 'View all' : 'View active'}</button>
         </form>
         <div>{todos.filter(todo => !todo.complete).length} left to do</div>
         <ul className="allTodos">

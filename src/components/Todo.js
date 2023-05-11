@@ -10,7 +10,7 @@ function Todo({ todo, markComplete, editTodo, deleteTodo, viewAll }) {
         <button onClick={() => markComplete(todo.id)}>Complete</button>
       </li>
       <div>
-      { !viewAll ?
+      { viewAll ?
         `Created: ${todo.created} Completd: ${todo.dateCompleted}`
         : null
       }

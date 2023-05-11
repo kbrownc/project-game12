@@ -3,7 +3,7 @@ import Todo from './Todo';
 
 function TodoList({ todos, markComplete, editTodo, deleteTodo, viewAll }) {
   return todos
-    .filter((item, index, todos) => (viewAll ? !item.complete : item.complete || !item.complete))
+    .filter((item, index, todos) => (!viewAll ? !item.complete : item.complete || !item.complete))
     .map(todo => {
       return (
         <Todo
